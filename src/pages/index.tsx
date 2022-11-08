@@ -10,7 +10,7 @@ export default function Home() {
         <title>Home | Finance</title>
       </Head>
       <HeaderHome/>
-      <main className={"max-w-6xl h-[calc(100vh_-_5rem)]  mx-auto my-0  px-0 py-8 " + " flex   justify-between content-center "}>
+      <main className={"max-w-6xl h-[calc(100vh_-_5rem)]  mx-auto my-0  px-0 py-8  " + " flex   justify-between content-center "}>
         <section className={"max-w-2xl my-32  " + " space-y-4 text-slate-200 font-medium"}>
           <span className='  text-4xl'>
             👏 Olá, Bem vindo
