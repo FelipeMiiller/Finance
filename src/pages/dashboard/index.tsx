@@ -16,18 +16,18 @@ export default function dashboard() {
 
 
 
-      <div className={"w-screen h-screen bg-gray-900 " + " flex     "}>
+      <div className={"max-w-7xl h-screen bg-gray-900 mx-auto" + " flex     "}>
       
       <SideBar/>
-      <main className={"w-[calc(100vw_-_14rem)] h-[calc(100vh_-_5rem)]    " + " flex flex-col  "}>
+      <main className={"w-auto h-[calc(100vh_-_5rem)]    " + " flex flex-col  "}>
       <HeaderDashboard/>
 
-      <div className={"flex flex-1"}>
+     
 
        <UserList/>
 
 
-      </div>
+      
       </main>
       </div>
     </>

@@ -36,11 +36,11 @@ export function SideBar() {
   return (
     <aside
       className={
-        "h-screen  w-56  my-0  px-0 bg-gray-900 bg-opacity-95 text-slate-200"
+        "h-screen  min-w-[14rem]    my-0  px-0 bg-gray-900 bg-opacity-95 text-slate-200"
       }
     >
       <div className={"h-20  border-b ro flex pl-2"}>
-        <h1 className={"my-auto text-4xl font-dancing"}>DashBoard</h1>
+        <h1 className={"my-auto text-3xl "}>DashBoard</h1>
       </div>
 
     

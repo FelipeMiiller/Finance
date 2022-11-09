@@ -25,84 +25,85 @@ export function UserList() {
 const color= "dark"
   
   return (
-    <div className={" w-[calc(100vw_-_14rem)] h-[calc(100vh_-_5rem)] " + 
+    <div className={" w-auto h-[calc(100vh_-_5rem)] " + 
     " text-slate-200  flex  flex-col  "} >
 
        
-<div className="flex flex-col overflow-x-auto rounded-xl border-4 border-transparent bg-gray-50 mt-6 ml-40 mr-auto text-gray-900">
+<div className="flex flex-col mt-6 ml-40 mr-auto overflow-x-auto border-4 border-transparent bg-gra-800 text-slate-200 rounded-xl">
  
-  <div className="flex justify-between  mx-2 ">
+  <div className="flex justify-between mx-2 ">
 
     <h2 className="my-auto font-bold">Usuarios</h2>
     
-     <button  className={"px-2 p-1 my-auto  rounded-full  bg-gray-100 hover:bg-gray-300 transition duration-150 ease-in-out"
+     <button  className={"px-2 p-1 my-auto  rounded-full  bg-pink-700 hover:bg-pink-600 transition duration-150 ease-in-out"
       + " "}>
       Cadastrar
      </button>
   </div>
 
-    <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+    <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
       <div className="overflow-hidden">
         <table className="min-w-full">
-          <thead className=" ">
+          <thead className="">
             <tr>
-              <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                Nome
+              <th scope="col" className="px-6 py-4 text-sm font-medium text-left text-gray-900">
+                Usuario
               </th>
-              <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                Email
-              </th>
-              <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+              <th scope="col" className="px-6 py-4 text-sm font-medium text-left text-gray-900">
                 Permissão
               </th>
-              <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                Data
+           
+              <th scope="col" className="px-6 py-4 text-sm font-medium text-left text-gray-900">
+                Data de Cadastro
               </th>
-              <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+              <th scope="col" className="px-6 py-4 text-sm font-medium text-left text-gray-900">
                 Configuração
               </th>
             </tr>
           </thead>
           <tbody>
             <tr className="bg-gray-100 border-b">
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">1</td>
-              <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+              <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
+              <p>Felipe Miiller</p>
+              <p className='mt-[0.1] text-xs font-light'>Felipemiiller@gmail.com</p>
+              </td>
+              <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">
                 Mark
               </td>
-              <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+              <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">
                 Otto
               </td>
-              <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+              <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">
                 @mdo
               </td>
-              <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+              <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">
                 @mdo
               </td>
             </tr>
             <tr className="bg-white border-b">
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">2</td>
-              <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+              <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">2</td>
+              <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">
                 Jacob
               </td>
-              <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+              <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">
                 Thornton
               </td>
-              <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+              <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">
                 @fat
               </td>
-              <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+              <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">
                 @fat
               </td>
             </tr>
             <tr className="bg-gray-100 border-b">
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">3</td>
-              <td colSpan={2} className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap text-center">
+              <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">3</td>
+              <td colSpan={2} className="px-6 py-4 text-sm font-light text-center text-gray-900 whitespace-nowrap">
                 Larry the Bird
               </td>
-              <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+              <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">
                 @twitter
               </td>
-              <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+              <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">
                 @twitter
               </td>
             </tr>
