@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useRef } from "react";
 import dashboard from "../../pages/dashboard";
 
 
@@ -6,7 +8,7 @@ import dashboard from "../../pages/dashboard";
 
 const dashboardLinks = [
   {
-    slug: "/",
+    slug: "/dashboard",
     name: "Dashboard",
     title:"Geral"
   },
@@ -26,13 +28,18 @@ const dashboardLinks = [
     title:"Financeiro"
   },
   {
-    slug: "usuarios",
+    slug: "users",
     name: "Usuarios",
     title:"Configuações"
   },
 ];
 
 export function SideBar() {
+  let {asPath} = useRouter()
+ 
+
+console.log(asPath)
+
   return (
     <aside
       className={
@@ -49,16 +56,15 @@ export function SideBar() {
 
         <ul className={"flex flex-col list-none  mt-2"}>
           {dashboardLinks.map((dash) => {
+
             if (dash.title == "Geral") {
               return (
-                <li
-                  key={dash.slug}
-                  className={
-                    "items-center px-2 py-1  " +
-                    " hover:text-slate-300    transition duration-150 ease-in-out"
-                  }
-                >
-                  <Link href={`/dashboard/${dash.slug}`}>{dash.name}</Link>
+                <li key={dash.slug}
+                className={"items-center px-2 py-1  " + " transition duration-150 ease-in-out " +
+               ( asPath.indexOf(dash.slug) === -1  ? " hover:text-slate-300" : " text-pink-700 hover:text-pink-500"  ) }
+               >
+                  
+                  <Link  href={`/${dash.slug}`}>{dash.name}</Link>
                 </li>
               );
             }
@@ -73,14 +79,11 @@ export function SideBar() {
           {dashboardLinks.map((dash) => {
             if (dash.title == "Financeiro") {
               return (
-                <li
-                  key={dash.slug}
-                  className={
-                    "items-center px-2 py-1  " +
-                    " hover:text-slate-300    transition duration-150 ease-in-out"
-                  }
-                >
-                  <Link href={`/dashboard/${dash.slug}`}>{dash.name}</Link>
+                <li key={dash.slug}
+                className={"items-center px-2 py-1  " + " transition duration-150 ease-in-out " +
+               ( asPath.indexOf(dash.slug) === -1  ? " hover:text-slate-300" : " text-pink-700 hover:text-pink-500"  ) }
+               >
+                  <Link href={`/${dash.slug}`}>{dash.name}</Link>
                 </li>
               );
             }
@@ -95,14 +98,12 @@ export function SideBar() {
           {dashboardLinks.map((dash) => {
             if (dash.title == "Configuações") {
               return (
-                <li
-                  key={dash.slug}
-                  className={
-                    "items-center px-2 py-1  " +
-                    " hover:text-slate-300    transition duration-150 ease-in-out"
-                  }
-                >
-                  <Link href={`/dashboard/${dash.slug}`}>{dash.name}</Link>
+                <li key={dash.slug}
+                className={"items-center px-2 py-1  " + " transition duration-150 ease-in-out " +
+               ( asPath.indexOf(dash.slug) === -1  ? " hover:text-slate-300" : " text-pink-700 hover:text-pink-500"  ) }
+               >
+                 
+                  <Link href={`/${dash.slug}`}>{dash.name}</Link>
                 </li>
               );
             }

@@ -10,7 +10,7 @@ export default function dashboard() {
   return (
     <>
       <Head>
-        <title>DashBoard | Finance</title>
+        <title>Users | Finance</title>
       </Head>
 
 <div className=' w-screen h-screen bg-gray-900'>
