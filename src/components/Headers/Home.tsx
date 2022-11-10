@@ -1,5 +1,5 @@
 
-import { SignInButton } from '../../SignInButton';
+import { SignInButton } from '../SignInButton';
 
 
 
