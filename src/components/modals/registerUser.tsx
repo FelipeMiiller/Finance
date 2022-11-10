@@ -1,8 +1,8 @@
 import Head from "next/head";
-import { UserList } from "../../components/dashboard/UserList";
-import Pagination from "../../components/Form/pagination";
-import { HeaderDashboard } from "../../components/Headers/Dashboard";
-import { SideBar } from "../../components/SideBar";
+import { UserList } from "../dashboard/UserList";
+import Pagination from "../Form/pagination";
+import { HeaderDashboard } from "../Headers/Dashboard";
+import { SideBar } from "../SideBar";
 
 import { useForm } from "react-hook-form";
 import { useState } from "react";

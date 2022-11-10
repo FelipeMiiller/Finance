@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { UserList } from '../../components/dashboard/UserList'
 import Pagination from '../../components/Form/pagination'
 import { HeaderDashboard } from '../../components/Headers/Dashboard'
-import ModalUserRegister from '../../components/modals/userRegister'
+import ModalUserRegister from '../../components/modals/registerUser'
 import { SideBar } from '../../components/SideBar'
 
 
