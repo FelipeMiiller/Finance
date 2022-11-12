@@ -10,80 +10,80 @@ import * as yup from "yup";
 
 
 import Email from "next-auth/providers/email";
+import { api } from "../../services/api";
 
 
 
 const schema = yup.object({
   company: yup.string().required(),
-  document: yup.string().required(),
-  email
+  document: yup.string().matches(/(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/, { excludeEmptyString: false }),
+  email:yup.string().email().required(),
 }).required();
 
-export default function ModalCompanyRegister({ onClose = () => { }}) {
-  const [isIsCnpjVisible, setIsCnpjVisible] = useState(false);
-  const {register,reset,handleSubmit,formState: { errors }} = useForm({
-    resolver: yupResolver(schema)
-  });
-
-  async function onSubmit(userSubmit) 
-  {
 
 
-  console.log(userSubmit);
- let userPost= {
- document: userSubmit.document.replace(/\D/g,""), 
- empresa: userSubmit.empresa.toUpperCase(),
- email:userSubmit.email
- }
-   
- console.log(userPost)
-
-  
- try {
-  await fauna.query(
-      q.If(
-        q.Not(
-          q.Exists(
-            q.Match(q.Index("company_by_cnpj"), q.Casefold(userPost.cnpj))
-          ),
-        ),
-        q.Create(q.Collection("company"), {
-          data: userSubmit.cnpj,
-        }),
-        q.Update(q.Ref(q.Index("user_by_email"), user.user.email), {
-          data: {
-            name: user.user.name,
-            image: user.user.image,
-          },
-        })
-      )
-    )
-    .then((ret) => console.log(ret))
-    .catch((err) =>
-      console.error(
-        "Error: [%s] %s: %s",
-        err.name,
-        err.message,
-        err.errors()[0].description
-      )
-    );
-
-  return true;
-} catch {
-  return false;
+type formsType = {
+  document:string;
+  company: string;
+  email:string; 
 }
 
-
-
-
-
-
-
-  }
+export default function ModalCompanyRegister({ onClose = () => { }}) {
+  const {register,reset,handleSubmit,formState: { errors }} = useForm<formsType>({
+    resolver: yupResolver(schema)
+  });
+  const [isFormVisible, setIsFormVisible] = useState(false);
+  const [formError, setFormError] = useState(false);
   
-  const onError = (errors, e) => console.log(errors, e);
 
 
+
+  
+
+ async function onSubmit(userSubmit: formsType) {
+   console.log(userSubmit);
+   let userPost = {
+     document: userSubmit.document.replace(/\D/g, ""),
+     company: userSubmit.company.toUpperCase(),
+     email: userSubmit.email.toUpperCase(),
+   };
+
+   try{
+
+    const response = await api.post('api/subscribe',{
+      ...userPost
+    })
+
+
+     alert("conta criada")
+
+    }
+    catch (err:any)
+    {
+     alert("Error: nao sei" + err.message);
+    }
+
+
+   
+
+   
+ }
+
+
+
+
+
+  
+   
+  const onError = (errors, e) => {
+    setFormError(errors != {} ? true : false)
+    console.log(errors, e);
+  
+  
+  
+  
+  }
+ 
   
   return (
     <>
@@ -101,9 +101,9 @@ export default function ModalCompanyRegister({ onClose = () => { }}) {
                 type="text"
                 className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-gray-700 border-0 rounded shadow placeholder-blueGray-300 text-slate-200 focus:outline-none focus:ring"
                 placeholder="Nome"
-                {...register("company", { required: true })}
+                {...register("company")}
               />
-               <p>{errors.company?.message}</p>
+              
             </div>
             <div className="relative w-full mb-3 ">
               <label
@@ -117,7 +117,6 @@ export default function ModalCompanyRegister({ onClose = () => { }}) {
                 className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-gray-700 border-0 rounded shadow placeholder-blueGray-300 text-slate-200 focus:outline-none focus:ring"
                 placeholder=" CNPJ ou CPF"
                 {...register("document", {
-                  required: true, maxLength: 18 ,minLength:14,
                   onChange: (e) => {
                     const OriginalValue = unMask(e.target.value);
                     const MaskValue = mask(OriginalValue,
@@ -128,7 +127,7 @@ export default function ModalCompanyRegister({ onClose = () => { }}) {
                 
               )}
               />
-               <p>{errors.document?.message}</p>
+           
             </div>
 
             <div className="relative w-full mb-3">
@@ -142,21 +141,19 @@ export default function ModalCompanyRegister({ onClose = () => { }}) {
                 type="text"
                 className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-gray-700 border-0 rounded shadow placeholder-blueGray-300 text-slate-200 focus:outline-none focus:ring"
                 placeholder="Email"
-                {...register("email", {
-                  required: true,
-                  pattern: /^\S+@\S+$/i,
-                })}
+                {...register("email")}
               />
-              <p>{errors.email?.message}</p>
+             
             </div>
 
           
 
             <div>
               <label className="flex flex-col w-full mt-4 cursor-point">
-                <span className="ml-2 text-sm font-semibold text-slate-200">
-                  <span className="text-lightBlue-500">
-                    <p> {} mensagem de erro</p>
+                <span className="h-5 ml-2 text-sm font-semibold text-slate-200">
+                  <span className="text-slate-300">
+                    {formError ? "corrija os dados" : null } 
+                   
                     
                   </span>
                 </span>
