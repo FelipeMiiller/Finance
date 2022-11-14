@@ -1,62 +1,95 @@
-import { query as q, query } from "faunadb";
+import { If, query as q, query } from "faunadb";
 import NextAuth from "next-auth";
-import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 import { fauna } from "../../../services/fauna";
+import { userFaunaDBType } from "../../../types/faunadb";
+
+
+
 
 export const authOptions = {
-  // Configure one or more authentication providers
+ 
   providers: [
-    GithubProvider({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
-      scope: "read:user",
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
-    // ...add more providers here
+    
   ],
   callbacks: {
-    async signIn(user, account, profile) {
-      console.log(user.user.email);
+    async signIn(user:userProviderType) {
+      const isAllowedToSignIn = true;
 
-      const email = user.user.email;
-      const name = user.user.name;
+     // console.log(user);
 
-      try {
+      if (isAllowedToSignIn) {
+        let status: boolean = true;
+        let userFaunaDB:(userFaunaDBType | object)
+
+        await fauna
+          .query(q.Get(q.Match(q.Index("user_by_email"), user.profile.email)))
+          .then((ret) => userFaunaDB=ret)
+          .catch((err) => {
+            console.log("🚀 ~ file: [...nextauth].ts ~ line 33 [%s] %s: %s",
+            err.name,
+            err.message,
+            err.errors()[0].description);
+            	
+          })
+
         await fauna
           .query(
-            q.If(
-              q.Not(
-                q.Exists(
-                  q.Match(q.Index("user_by_email"), q.Casefold(user.user.email))
-                )
-              ),
-              q.Create(q.Collection("users"), {
-                data: user.user,
-              }),
-              q.Update(q.Ref(q.Index("user_by_email"), user.user.email), {
+            q.If(q.Not(
+              q.Exists(
+                q.Match(q.Index("user_by_email"), q.Casefold(user.profile.email))
+              )),
+              false,
+              q.Update(q.Ref(q.Collection("users"), userFaunaDB.ref.id), {
                 data: {
-                  name: user.user.name,
-                  image: user.user.image,
+                  name: user.profile.name,
+                  image: user.profile.image,
+                  emailVerified: user.profile.email_verified,
                 },
-              })
+              }),
             )
           )
-          .then((ret) => console.log(ret))
-          .catch((err) =>
-            console.error(
-              "Error: [%s] %s: %s",
-              err.name,
-              err.message,
-              err.errors()[0].description
-            )
-          );
+          .then((ret) => {
+            console.log(ret);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
 
-        return true;
-      } catch {
+        return status;
+      } else {
+        
         return false;
+        
       }
-
-      return true;
     },
   },
 };
 export default NextAuth(authOptions);
+
+
+
+
+
+
+
+
+
+
+
+
+type userProviderType = {
+  
+  profile: {
+    name: string;
+    email: string;
+    image: string;
+    email_verified: boolean;
+    picture: string;
+  };
+
+}

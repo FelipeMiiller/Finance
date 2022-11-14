@@ -26,6 +26,7 @@ type formsType = {
   document:string;
   company: string;
   email:string; 
+  dateCreated:Date;
 }
 
 export default function ModalCompanyRegister({ onClose = () => { }}) {
@@ -44,8 +45,9 @@ export default function ModalCompanyRegister({ onClose = () => { }}) {
    console.log(userSubmit);
    let userPost = {
      document: userSubmit.document.replace(/\D/g, ""),
-     company: userSubmit.company.toUpperCase(),
-     email: userSubmit.email.toUpperCase(),
+     company: userSubmit.company,
+     email: userSubmit.email.toLowerCase(),
+     dateCreated: new Date()
    };
 
    try{
@@ -60,13 +62,9 @@ export default function ModalCompanyRegister({ onClose = () => { }}) {
     }
     catch (err:any)
     {
-     alert("Error: nao sei" + err.message);
+     alert("Error: " + err.message);
     }
 
-
-   
-
-   
  }
 
 
@@ -138,7 +136,7 @@ export default function ModalCompanyRegister({ onClose = () => { }}) {
                 Email
               </label>
               <input
-                type="text"
+                type="email"
                 className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-gray-700 border-0 rounded shadow placeholder-blueGray-300 text-slate-200 focus:outline-none focus:ring"
                 placeholder="Email"
                 {...register("email")}

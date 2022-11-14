@@ -1,11 +1,11 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { UserList } from '../../components/dashboard/UserList'
-import Pagination from '../../components/Form/pagination'
-import { HeaderDashboard } from '../../components/Headers/Dashboard'
-import ModalUserRegister from '../../components/modals/registerUser'
-import { SideBar } from '../../components/SideBar'
+import { UserList } from '../../../components/dashboard/UserList'
+import Pagination from '../../../components/Form/pagination'
+import { HeaderDashboard } from '../../../components/Headers/Dashboard'
+import ModalUserRegister from '../../../components/modals/registerUser'
+import { SideBar } from '../../../components/SideBar'
 
 
 const UsersApi = [
@@ -48,6 +48,8 @@ const UsersApi = [
 
 
 
+
+Users.auth = true
 export default function Users() {
   const router = useRouter()
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -82,7 +84,7 @@ export default function Users() {
   return (
     <>
       <Head>
-        <title>Users | Finance</title>
+        <title>Dashboard | Finance</title>
       </Head>
 
       <div className="w-screen h-screen bg-gray-900 ">

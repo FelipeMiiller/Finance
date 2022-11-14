@@ -1,12 +1,26 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { HeaderHome } from '../components/Headers/Home'
 import ModalCompanyRegister from '../components/Form/registerCompany';
+import { Session } from 'inspector';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import useAuth, { UseAuthType } from '../contexts/AuthContex';
 
 
 export default function Home() {
   const [isModalVisible, setIsModalVisible] = useState(false);
+const {authRedirect}= useAuth() as UseAuthType ;
+  
+
+  useEffect(() => {
+   authRedirect();
+   
+    
+  }, [])
+
+
 
 
 

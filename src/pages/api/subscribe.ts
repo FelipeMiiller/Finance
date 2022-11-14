@@ -5,6 +5,7 @@ import { stripe } from "../../services/stripe";
 import { getSession } from "next-auth/react";
 import { authOptions } from "./auth/[...nextauth]";
 import { unstable_getServerSession } from "next-auth";
+import { companyFaunaDB } from "../../types/faunadb";
 
 type User = {
   ref: {
@@ -37,6 +38,7 @@ type postType = {
   document:string;
   company: string;
   email:string; 
+  dateCreated:Date;
 }
 
 
@@ -54,7 +56,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
   
     
 try {
-     
+    
   
      await fauna
        .query(
@@ -70,6 +72,7 @@ try {
            q.Create(q.Collection("users"), {
              data: {
                email: requestSubscribe.email,
+               date:requestSubscribe.dateCreated
              },
            }),
            "usuario ja cadastrado"
@@ -104,6 +107,7 @@ try {
                  name: requestSubscribe.company,
                  document: requestSubscribe.document,
                  email: requestSubscribe.email,
+                 date:requestSubscribe.dateCreated
                },
              },
            }),
@@ -122,10 +126,10 @@ try {
  
 
 
-       let userFaunaDB = await fauna.query(
+       let userFaunaDB:userFaunaType = await fauna.query(
         q.Get(q.Match(q.Index("user_by_email"), requestSubscribe.email))
       );
-      let companyFaunaDB = await fauna.query(
+      let companyFaunaDB:companyFaunaDB = await fauna.query(
         q.Get(q.Match(q.Index("company_by_document"), requestSubscribe.document))
       );
     
@@ -137,21 +141,29 @@ try {
               q.Not(
                 q.Exists(
                   q.Match(
-                    q.Index("subscriptions_by_companyRef"),
+                    q.Index("permission_by_companyRef"),
                     q.Casefold(companyFaunaDB.ref)
                   )
                 )
               ),
-              q.Create(q.Collection("subscriptions"), {
+              q.Create(q.Collection("permissions"), {
                 data: {
                   companyRef:companyFaunaDB.ref,
-                  userRef:userFaunaDB.ref
+                  userRef:userFaunaDB.ref,
+                  date:requestSubscribe.dateCreated,
+                  permission:"admin"
                 },
               }),
             "Empresa já Cadastrada"
             )
           )
-          .then((ret) => console.log(ret))
+          .then((ret) => {
+
+
+             ret
+
+
+          })
           .catch((err) =>
             console.error(
               "Error: [%s] %s: %s",

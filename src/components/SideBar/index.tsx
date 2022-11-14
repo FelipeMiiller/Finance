@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useRef } from "react";
-import dashboard from "../../pages/dashboard";
+import dashboard from "../../pages/finance/dashboard";
 
 
 
