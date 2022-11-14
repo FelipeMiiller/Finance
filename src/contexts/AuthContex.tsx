@@ -29,15 +29,13 @@ export const AuthProvider = (props: AuthProviderProps) => {
 
 
 
-   function authRedirect() {
+   async function authRedirect() {
     console.log(session);
     expires= new Date(session?.expires);
 
     if (signed && status === "authenticated") {
 
-      await api.post('api/user',{
-        session.user.email
-      })
+      await api.post('api/authuser')
       .then((response) =>{
         let resp = response?.data;
         sessionStorage.setItem("user_bd", JSON.stringify(resp));
@@ -49,6 +47,10 @@ export const AuthProvider = (props: AuthProviderProps) => {
 
 
 
+
+
+
+      
       router.push("/finance/dashboard");
 
     }

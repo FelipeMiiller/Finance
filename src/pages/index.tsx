@@ -11,14 +11,6 @@ import useAuth, { UseAuthType } from '../contexts/AuthContex';
 
 export default function Home() {
   const [isModalVisible, setIsModalVisible] = useState(false);
-const {authRedirect}= useAuth() as UseAuthType ;
-  
-
-  useEffect(() => {
-   authRedirect();
-   
-    
-  }, [])
 
 
 

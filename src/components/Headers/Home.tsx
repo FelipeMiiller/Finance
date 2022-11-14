@@ -1,4 +1,6 @@
 
+import { useEffect } from 'react';
+import useAuth, { UseAuthType } from '../../contexts/AuthContex';
 import { SignInButton } from '../Form/SignInButton';
 
 
@@ -16,6 +18,20 @@ import { SignInButton } from '../Form/SignInButton';
 
 
 export function HeaderHome() {
+
+  const {authRedirect}= useAuth() as UseAuthType ;
+  
+
+  useEffect(() => {
+   authRedirect();
+   
+    
+  }, [])
+
+
+
+
+
   return (
     <header className={"h-20 w-screem bg-black border-b"} >
       <div className={"h-20 max-w-6xl      " + " flex justify-between content-center mx-auto px-2 " }>

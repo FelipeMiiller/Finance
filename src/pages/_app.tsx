@@ -7,6 +7,7 @@ import { NextComponentType } from 'next';
 import { NextPageContextCustom } from '../types';
 import { ReactNode, useEffect } from 'react';
 import { AuthProvider } from '../contexts/AuthContex';
+import { JsxElement } from 'typescript';
 
 interface AppPropsCustom {
 
@@ -21,15 +22,15 @@ export default function App({ Component, pageProps }:AppPropsCustom) {
   return  (
    
     < SessionProvider session={pageProps.session}>
-         <AuthProvider>
-    {Component.auth ? (
+       <AuthProvider>
+       {Component.auth ? (
         <Auth>
           <Component {...pageProps} />      
         </Auth>
       ) : (
         <Component {...pageProps} />
       )}
-      </AuthProvider>
+        </AuthProvider>
       </ SessionProvider>
     
   );
@@ -40,7 +41,7 @@ export default function App({ Component, pageProps }:AppPropsCustom) {
 
 
 interface Props {
-  children: React.ReactNode;
+  children: React.ReactNode | JsxElement;
 }
 
 function Auth ({ children }:Props)  {

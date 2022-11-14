@@ -19,7 +19,7 @@ const { data: session, status } = useSession()
 
 
   return status === "authenticated" ? ( 
-   <button type="button" className={" flex px-4 p-2 my-auto space-x-1 items-center justify-between bg-gray-800 text-slate-100 rounded-full hover:bg-gray-700 transition duration-150 ease-in-out space-x-1"}
+   <button type="button" className={" flex px-4 p-2 my-auto  items-center justify-between bg-gray-800 text-slate-100 rounded-full hover:bg-gray-700 transition duration-150 ease-in-out space-x-1"}
    onClick={()=> signOut()}>
 
     <FaGoogle color="#04d361"/>
@@ -27,7 +27,7 @@ const { data: session, status } = useSession()
     <FiX color='#737380' className={""}/>
    </button>
   ):( 
-    <button type="button" className={" flex px-4 p-2 my-auto space-x-1 items-center  justify-between bg-gray-800 text-slate-100 rounded-full hover:bg-gray-700 transition duration-150 ease-in-out space-x-1"} 
+    <button type="button" className={" flex px-4 p-2 my-auto  items-center  justify-between bg-gray-800 text-slate-100 rounded-full hover:bg-gray-700 transition duration-150 ease-in-out space-x-1"} 
     onClick={()=>signIn('google')}  >
       
      <FaGoogle color="#eba417"/>

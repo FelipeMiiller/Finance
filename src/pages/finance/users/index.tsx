@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -53,6 +54,8 @@ Users.auth = true
 export default function Users() {
   const router = useRouter()
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const { data: session, status } = useSession();
+  
 
 
 
