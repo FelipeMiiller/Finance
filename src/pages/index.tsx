@@ -10,11 +10,26 @@ import useAuth, { UseAuthType } from '../contexts/AuthContex';
 
 
 export default function Home() {
+  const router = useRouter()
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const { data: session, status } = useSession()
+  const isUser = !!session?.user
+  const {authRedirect, signed}= useAuth() as UseAuthType ;
+  
+  
 
 
+  useEffect(() => {
+    if (status === "authenticated" && signed ){
+      authRedirect()
 
+      router.push("/finance/dashboard")
+      
+    }
+  }, [isUser,status]);
 
+  
+  
 
   const buttonModalRegister = () => {
     setIsModalVisible(!isModalVisible);

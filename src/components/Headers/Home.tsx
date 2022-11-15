@@ -1,6 +1,6 @@
 
 import { useEffect } from 'react';
-import useAuth, { UseAuthType } from '../../contexts/AuthContex';
+
 import { SignInButton } from '../Form/SignInButton';
 
 
@@ -19,16 +19,7 @@ import { SignInButton } from '../Form/SignInButton';
 
 export function HeaderHome() {
 
-  const {authRedirect}= useAuth() as UseAuthType ;
-  
-
-  useEffect(() => {
-   authRedirect();
-   
-    
-  }, [])
-
-
+ 
 
 
 

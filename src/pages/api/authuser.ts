@@ -47,6 +47,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
   const session = await unstable_getServerSession(request, response, authOptions)
 
   console.log(session)
+  console.log("teste")
 
   if (request.method === "POST") {
    

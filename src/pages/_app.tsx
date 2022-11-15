@@ -56,7 +56,10 @@ function Auth ({ children }:Props)  {
 
   }, [isUser, status])
 
-  if (isUser) {
+  if (isUser)
+  
+  
+  {
     return children
   }
 

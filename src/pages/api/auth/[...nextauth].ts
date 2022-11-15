@@ -20,7 +20,7 @@ export const authOptions = {
     async signIn(user:userProviderType) {
       const isAllowedToSignIn = true;
 
-     // console.log(user);
+   
 
       if (isAllowedToSignIn) {
         let status: boolean = true;

@@ -1,7 +1,7 @@
 
 import { api } from "../services/api";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { signOut, useSession } from "next-auth/react";
+import {signIn, signOut, useSession } from "next-auth/react"
 import { userFaunaDBType } from "../types/faunadb";
 import { useRouter } from "next/router";
 
@@ -17,11 +17,15 @@ export const AuthProvider = (props: AuthProviderProps) => {
   const { data: session, status } = useSession();
   const signed = !!session?.user;
   const [user, setUser] = useState<UserTypes>();
+  const isUser = !user;
   let expires:(undefined | Date | null)= null;
 
 
   useEffect(() => {
     setUser(localStorage.getItem("user_bd") ? JSON.parse(localStorage.getItem("user_bd") || ""): null);
+
+
+
     
   }, []);
 
@@ -29,29 +33,39 @@ export const AuthProvider = (props: AuthProviderProps) => {
 
 
 
-   async function authRedirect() {
-    console.log(session);
-    expires= new Date(session?.expires);
+
+
+  
+  useEffect(() => {
+  
+   if(!isUser && status==="authenticated" ) 
+   {
+    await api.post('api/authuser')
+    .then((response) =>{
+      let resp = response?.data;
+      sessionStorage.setItem("user_bd", JSON.stringify(resp));
+      setUser(resp)
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    router.push("/finance/dashboard");
+  }
+    
+  }, [signed,status]);
+
+
+
+ 
+
+   async function getSession(session) {
+    
+    console.log(session)
 
     if (signed && status === "authenticated") {
 
-      await api.post('api/authuser')
-      .then((response) =>{
-        let resp = response?.data;
-        sessionStorage.setItem("user_bd", JSON.stringify(resp));
-        setUser(resp)
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-
-
-
-
-
-
       
-      router.push("/finance/dashboard");
+    
 
     }
 
@@ -77,8 +91,9 @@ export const AuthProvider = (props: AuthProviderProps) => {
       value={{
         signed,
         user,
-        authRedirect,
+        getSession,
         signout,
+        status
       }}
     >
       {props.children}
@@ -101,11 +116,11 @@ export default function useAuth()  {
 export type UseAuthType = {
   user: userFaunaDBType;
   signed:boolean;
-  authRedirect: () => Promise<void>;
+  getSession: (session:any) => Promise<void>;
   signout: () => void;
   getBusiness: () => Promise<void>;
   userBusiness:userBusinessType;
-
+  status: "authenticated" | "loading" | "unauthenticated"
 
 };
 
