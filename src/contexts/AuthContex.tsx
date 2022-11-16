@@ -1,7 +1,7 @@
 
 import { api } from "../services/api";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import {signIn, signOut, useSession } from "next-auth/react"
+import {signIn, signOut as sigOutAuth, useSession } from "next-auth/react"
 import { userFaunaDBType } from "../types/faunadb";
 import { useRouter } from "next/router";
 
@@ -17,55 +17,49 @@ export const AuthProvider = (props: AuthProviderProps) => {
   const { data: session, status } = useSession();
   const signed = !!session?.user;
   const [user, setUser] = useState<UserTypes>();
-  const isUser = !user;
-  let expires:(undefined | Date | null)= null;
+  const isAuthorization = !!session?.user && status=="authenticated";
+  const isPermissions = !!user?.permissoes;
+  let expires =session?.expires;
+
+  //console.log(status)
+ // console.log(isAuthorization)
 
 
   useEffect(() => {
     setUser(localStorage.getItem("user_bd") ? JSON.parse(localStorage.getItem("user_bd") || ""): null);
 
-
-
-    
   }, []);
 
 
-
-
-
-
-
   
-  useEffect(() => {
+   useEffect( () => {
+   fetchFaunaData()
+
+
+  }, [session,status]);
+
+
+
+
+ const fetchFaunaData = async() =>{
   
-   if(!isUser && status==="authenticated" ) 
-   {
-    await api.post('api/authuser')
-    .then((response) =>{
-      let resp = response?.data;
-      sessionStorage.setItem("user_bd", JSON.stringify(resp));
-      setUser(resp)
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-    router.push("/finance/dashboard");
-  }
-    
-  }, [signed,status]);
-
-
-
  
 
-   async function getSession(session) {
-    
-    console.log(session)
+    if( isAuthorization && !isPermissions ) 
+    {
 
-    if (signed && status === "authenticated") {
+      await api.post('api/authuser')
+      .then((response) =>{
+        let resp = response?.data;
+        sessionStorage.setItem("user_bd", JSON.stringify(resp));
+        setUser(resp)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
-      
-    
+
+
 
     }
 
@@ -73,33 +67,34 @@ export const AuthProvider = (props: AuthProviderProps) => {
 
 
 
-
-  }
-
+ }
 
 
 
 
-  const signout = () => {
+
+  const signOut = () => {
     setUser(undefined);
-    signOut();
+    sigOutAuth();
     localStorage.removeItem("user_bd");
   };
 
   return (
     <AuthContext.Provider
       value={{
+        expires,
         signed,
         user,
-        getSession,
-        signout,
-        status
+        session,
+        signOut,
+        status,
+        isAuthorization
       }}
     >
       {props.children}
     </AuthContext.Provider>
   );
-};;
+};
 
 
 
@@ -114,10 +109,13 @@ export default function useAuth()  {
 
 
 export type UseAuthType = {
+  session:any;
+  expires:string | undefined
   user: userFaunaDBType;
   signed:boolean;
-  getSession: (session:any) => Promise<void>;
-  signout: () => void;
+  isAuthorization:boolean;
+  //getSession: (session:any) => Promise<void>;
+  signOut: () => void;
   getBusiness: () => Promise<void>;
   userBusiness:userBusinessType;
   status: "authenticated" | "loading" | "unauthenticated"

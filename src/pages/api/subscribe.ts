@@ -107,7 +107,7 @@ try {
                  name: requestSubscribe.company,
                  document: requestSubscribe.document,
                  email: requestSubscribe.email,
-                 date:requestSubscribe.dateCreated
+                 dateCreated:requestSubscribe.dateCreated
                },
              },
            }),
@@ -151,7 +151,8 @@ try {
                   companyRef:companyFaunaDB.ref,
                   userRef:userFaunaDB.ref,
                   date:requestSubscribe.dateCreated,
-                  permission:"admin"
+                  permission:"admin",
+                 
                 },
               }),
             "Empresa já Cadastrada"

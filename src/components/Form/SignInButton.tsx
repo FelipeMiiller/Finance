@@ -2,7 +2,9 @@
 
 import {FaGoogle} from 'react-icons/fa'
 import {FiX} from 'react-icons/fi'
-import {signIn, signOut, useSession } from "next-auth/react"
+import {signIn } from "next-auth/react"
+import useAuth, { UseAuthType } from '../../contexts/AuthContex';
+
 
 
 
@@ -12,8 +14,9 @@ import {signIn, signOut, useSession } from "next-auth/react"
 
 
 export function SignInButton() {
+  const {status,session,signOut}= useAuth() as UseAuthType ;
 
-const { data: session, status } = useSession()
+
 //console.log(status)
 //console.log(session?.user)
 

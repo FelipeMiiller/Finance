@@ -20,7 +20,7 @@ export const authOptions = {
     async signIn(user:userProviderType) {
       const isAllowedToSignIn = true;
 
-   
+    
 
       if (isAllowedToSignIn) {
         let status: boolean = true;
@@ -44,10 +44,10 @@ export const authOptions = {
                 q.Match(q.Index("user_by_email"), q.Casefold(user.profile.email))
               )),
               false,
-              q.Update(q.Ref(q.Collection("users"), userFaunaDB.ref.id), {
+              q.Update(q.Ref(q.Collection("users"), userFaunaDB?.ref.id), {
                 data: {
                   name: user.profile.name,
-                  image: user.profile.image,
+                  image: user.profile.picture,
                   emailVerified: user.profile.email_verified,
                 },
               }),

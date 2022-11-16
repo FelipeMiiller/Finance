@@ -1,5 +1,8 @@
+
+
+
 export type userFaunaDBType = {
-  ref: { id: string };
+  ref: { id: string } | undefined;
 
   data: {
     name: string;
@@ -8,10 +11,10 @@ export type userFaunaDBType = {
     emailVerified: string;
     date: Date;
   };
-};
+} | Object |undefined;
 
-export type companyFaunaDB = {
-  ref: { id: string };
+export type companyFaunaDBType = {
+  ref: { id: string } | undefined;
   data: {
     informations: {
       name: string;
@@ -20,14 +23,14 @@ export type companyFaunaDB = {
       date: Date;
     };
   };
-};
+} | Object |undefined;
 
-export type permissionFaunaDB = {
-  ref: { id: string };
+export type permissionFaunaDBType = {
+  ref: { id: string } | undefined;
   data: {
     companyRef:string;
     userRef:string;
     date: string;
     permission: "admin" | "read"|"write";
   };
-};
+} | Object |undefined;
