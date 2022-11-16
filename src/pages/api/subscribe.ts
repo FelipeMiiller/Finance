@@ -148,9 +148,7 @@ try {
               ),
               q.Create(q.Collection("permissions"), {
                 data: {
-                  companyRef:companyFaunaDB.ref,
-                  userRef:userFaunaDB.ref,
-                  date:requestSubscribe.dateCreated,
+                  companyRef:companyFaunaDB.refbe.dateCreated,
                   permission:"admin",
                  
                 },

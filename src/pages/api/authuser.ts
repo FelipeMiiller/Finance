@@ -28,12 +28,13 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
   const{user, expires} =session
   let userData
   const validated = (new Date(expires)) > (new Date())
-  console.log(session)
+  //console.log(session)
   
 
   if (request.method === "POST" &&   validated) {
    let userFaunaDB:userFaunaDBType = undefined;
    let permissionFaunaDB:permissionFaunaDBType =undefined;
+   let permissions: never[]=[]
     await fauna
           .query(q.Get(q.Match(q.Index("user_by_email"), user.email)))
           .then((ret) => userFaunaDB=ret)
@@ -60,15 +61,23 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
 
 
 
-          await fauna.query(
-            q.Get(q.Paginate(q.Match(q.Index('permissions_by_userRef'), userFaunaDB.ref)))
-          )
-          .then((ret) => console.log(ret))
+          await fauna.query(q.Map(
+            q.Paginate(
+             q.Match(q.Index('permissions_by_userRef'), userFaunaDB.ref)
+            ),
+            q.Lambda(
+              "permissions",
+              q.Get(q.Var("permissions"))
+            )
+          ))
+
+          .then((ret) =>  permissions = ret.data)
           .catch((err) => console.error(
-            'Error: [%s] %s: %s',
+            console.log("🚀 ~ file: authuser.ts ~ line 68 [%s] %s: %s",
             err.name,
             err.message,
-            err.errors()[0].description,
+            err.errors()[0].description)
+            	
           ))
 
 
@@ -79,7 +88,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
           .query(q.Get(q.Match(q.Index("permissions_by_userRef"), userFaunaDB.ref)))
           .then((ret) => permissionFaunaDB=ret)
           .catch((err) => {
-            console.log("🚀 ~ file: authuser.ts ~ line 54 [%s] %s: %s",
+            console.log("🚀 ~ file: authuser.ts ~ line 83 [%s] %s: %s",
             err.name,
             err.message,
             err.errors()[0].description);
@@ -91,9 +100,9 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
 
 
 
-
-         console.log(userFaunaDB.ref.id)
-       console.log(permissionFaunaDB)
+          console.log(permissions[0])
+        // console.log(userFaunaDB.ref.id)
+     //  console.log(permissionFaunaDB)
 
 
    response.status(200).end("Conta criada");
