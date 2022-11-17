@@ -2,7 +2,7 @@
 
 
 export type userFaunaDBType = {
-  ref: { id: string } | undefined;
+  ref: { id: string } | Promise;
 
   data: {
     name: string;
@@ -11,10 +11,10 @@ export type userFaunaDBType = {
     emailVerified: string;
     date: Date;
   };
-} | Object |undefined;
+} | Object |  Promise;
 
 export type companyFaunaDBType = {
-  ref: { id: string } | undefined;
+  ref: { id: string } |  Promise;
   data: {
     informations: {
       name: string;
@@ -23,7 +23,7 @@ export type companyFaunaDBType = {
       date: Date;
     };
   };
-} | Object |undefined;
+} | Object |  Promise;
 
 export type permissionFaunaDBType = {
   ref: { id: string } | undefined;

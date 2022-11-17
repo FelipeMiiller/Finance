@@ -5,7 +5,8 @@ import { stripe } from "../../services/stripe";
 import { getSession } from "next-auth/react";
 import { authOptions } from "./auth/[...nextauth]";
 import { unstable_getServerSession } from "next-auth";
-import { companyFaunaDB } from "../../types/faunadb";
+import { companyFaunaDBType, userFaunaDBType } from "../../types/faunadb";
+
 
 type User = {
   ref: {
@@ -103,12 +104,10 @@ try {
            ),
            q.Create(q.Collection("companies"), {
              data: {
-               informations: {
                  name: requestSubscribe.company,
                  document: requestSubscribe.document,
                  email: requestSubscribe.email,
                  dateCreated:requestSubscribe.dateCreated
-               },
              },
            }),
            "empresa ja cadastrada"
@@ -126,10 +125,10 @@ try {
  
 
 
-       let userFaunaDB:userFaunaType = await fauna.query(
+       let userFaunaDB:userFaunaDBType = await fauna.query(
         q.Get(q.Match(q.Index("user_by_email"), requestSubscribe.email))
       );
-      let companyFaunaDB:companyFaunaDB = await fauna.query(
+      let companyFaunaDB:companyFaunaDBType = await fauna.query(
         q.Get(q.Match(q.Index("company_by_document"), requestSubscribe.document))
       );
     
@@ -148,21 +147,17 @@ try {
               ),
               q.Create(q.Collection("permissions"), {
                 data: {
-                  companyRef:companyFaunaDB.refbe.dateCreated,
+                  companyRef:companyFaunaDB.ref,
                   permission:"admin",
+                  dateCreated:requestSubscribe.dateCreated,
+                  userRef:userFaunaDB.ref
                  
                 },
               }),
             "Empresa já Cadastrada"
             )
           )
-          .then((ret) => {
-
-
-             ret
-
-
-          })
+          .then((ret) => console.log(ret))
           .catch((err) =>
             console.error(
               "Error: [%s] %s: %s",

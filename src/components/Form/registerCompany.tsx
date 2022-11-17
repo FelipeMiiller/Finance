@@ -56,8 +56,8 @@ export default function ModalCompanyRegister({ onClose = () => { }}) {
       ...userPost
     })
 
-
-     alert("conta criada")
+console.log(response);
+     alert(response)
 
     }
     catch (err:any)

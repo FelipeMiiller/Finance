@@ -34,76 +34,90 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
   if (request.method === "POST" &&   validated) {
    let userFaunaDB:userFaunaDBType = undefined;
    let permissionFaunaDB:permissionFaunaDBType =undefined;
-   let permissions: never[]=[]
-    await fauna
-          .query(q.Get(q.Match(q.Index("user_by_email"), user.email)))
-          .then((ret) => userFaunaDB=ret)
-          .catch((err) => {
-            console.log("🚀 ~ file: authuser.ts ~ line 44 [%s] %s: %s",
-            err.name,
-            err.message,
-            err.errors()[0].description);
-            	
-          })
+   let userPermissionsRef: never[]=[]
+   let userCompanies: never[]=[]
+   
 
-
-    
           await fauna
-          .query(q.Get(q.Match(q.Index("permissions_by_userRef"), userFaunaDB.ref)))
-          .then((ret) => permissionFaunaDB=ret)
-          .catch((err) => {
-            console.log("🚀 ~ file: authuser.ts ~ line 54 [%s] %s: %s",
-            err.name,
-            err.message,
-            err.errors()[0].description);
-            	
-          })
+            .query(q.Get(q.Match(q.Index("user_by_email"), user.email)))
+            .then((ret) => (userFaunaDB = ret))
+            .catch((err) => {
+              console.log(
+                "🚀 ~ file: authuser.ts ~ line 44 [%s] %s: %s",
+                err.name,
+                err.message,
+                err.errors()[0].description
+              );
+            });
 
-
-
-          await fauna.query(q.Map(
-            q.Paginate(
-             q.Match(q.Index('permissions_by_userRef'), userFaunaDB.ref)
-            ),
-            q.Lambda(
-              "permissions",
-              q.Get(q.Var("permissions"))
+          await fauna
+            .query(
+              q.Map(
+                q.Paginate(
+                  q.Match(q.Index("permission_by_userRef"), userFaunaDB.ref)
+                ),
+                q.Lambda("permissions", q.Get(q.Var("permissions")))
+              )
             )
-          ))
-
-          .then((ret) =>  permissions = ret.data)
-          .catch((err) => console.error(
-            console.log("🚀 ~ file: authuser.ts ~ line 68 [%s] %s: %s",
-            err.name,
-            err.message,
-            err.errors()[0].description)
-            	
-          ))
-
-
-
-
+            .then((ret) => (userPermissionsRef = ret.data))
+            .catch((err) =>
+              console.error(
+                console.log(
+                  "🚀 ~ file: authuser.ts ~ line 68 [%s] %s: %s",
+                  err.name,
+                  err.message,
+                  err.errors()[0].description
+                )
+              )
+            );
 
           await fauna
-          .query(q.Get(q.Match(q.Index("permissions_by_userRef"), userFaunaDB.ref)))
-          .then((ret) => permissionFaunaDB=ret)
-          .catch((err) => {
-            console.log("🚀 ~ file: authuser.ts ~ line 83 [%s] %s: %s",
-            err.name,
-            err.message,
-            err.errors()[0].description);
-            	
-          })
+            .query(
+              q.Map(
+                q.Paginate(
+                  q. Union(
+                    q.Map(
+                      userPermissionsRef.map(item => item.data.companyRef),
+                      q.Lambda(
+                        "companies",
+                        q. Match(q.Index("company_by_ref"), q.Var("companies"))
+                      )
+                    )
+                  )
+                ),
+                q.Lambda("X", q.Get(q.Var("X")))
+              )
+            ).then((ret) => userCompanies=ret.data)
+            .catch((err) =>
+              console.error(
+                console.log(
+                  "🚀 ~ file: authuser.ts ~ line 94 [%s] %s: %s",
+                  err.name,
+                  err.message,
+                  err.errors()[0].description
+                )
+              )
+            );
+
+       
 
 
-      
+           let userPermissions = userPermissionsRef.map((permission) => {
+              let dataCompany = userCompanies.find(
+                (company) => company.ref.id === permission.data.companyRef.id
+              );
+              return {
+                nameCompany: dataCompany.data.name,
+                documentCompany: dataCompany.data.document,
+                emailCompany: dataCompany.data.email,
+                dateCreatedCompany: dataCompany.data.dateCreated,
+                permission: permission.data.permission,
+                dateCreatedPermission: permission.data.dateCreated,
+              };
+            });
 
 
-
-          console.log(permissions[0])
-        // console.log(userFaunaDB.ref.id)
-     //  console.log(permissionFaunaDB)
-
+       console.log(userPermissions)
 
    response.status(200).end("Conta criada");
   } else {
