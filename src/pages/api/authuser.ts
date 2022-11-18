@@ -36,10 +36,10 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
    let userFaunaDB:userFaunaDBType = undefined;
    let permissionFaunaDB:permissionFaunaDBType =undefined;
    let userPermissionsRef: never[]=[]
-   let userCompanies: never[]=[]
+   let userCompaniesRef: never[]=[]
    let companiesUsers: never[]=[]
    let usersRef: never[]=[]
-   let users={}
+   let users: never[]=[]
 
           await fauna
             .query(q.Get(q.Match(q.Index("user_by_email"), user.email)))
@@ -90,7 +90,9 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
                 ),
                 q.Lambda("X", q.Get(q.Var("X")))
               )
-            ).then((ret) => userCompanies=ret.data)
+            ).then((ret) => 
+              userCompaniesRef = ret.data
+            )
             .catch((err) =>
               console.error(
                 console.log(
@@ -129,7 +131,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
                 )
               )
             );
-            userCompanies.map(company => company.ref)
+           
           
 
 
@@ -139,7 +141,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
                 q.Paginate(
                   q. Union(
                     q.Map(
-                      userCompanies.map(company => company.ref),
+                      userCompaniesRef.map(company => company.ref),
                       q.Lambda(
                         "permissions",
                         q. Match(q.Index("permission_by_companyRef"), q.Var("permissions"))
@@ -163,59 +165,67 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
 
 
             await fauna
-            .query(
-              q.Map(
-                q.Paginate(
-                  q. Union(
-                    q.Map(
-
-                      (usersRef.map(item => item.id).filter((elem, pos, self)=> {
-                        return self.indexOf(elem) == pos;
-                    }))
-                  ,
-                      q.Lambda(
-                        "users",
-                        q.Match(q.Index("user_by_id"), q.Var("users"))
+              .query(
+                q.Map(
+                  q.Paginate(
+                    q.Union(
+                      q.Map(
+                        usersRef
+                          .map((item) => item.id)
+                          .filter((elem, pos, self) => {
+                            return self.indexOf(elem) == pos;
+                          }),
+                        q.Lambda(
+                          "users",
+                          q.Match(q.Index("user_by_id"), q.Var("users"))
+                        )
                       )
                     )
-                  )
-                ),
-                q.Lambda("X", q.Get(q.Var("X")))
-              )
-            ).then((ret) => users = ret)
-            .catch((err) =>
-              console.error(
-                console.log(
-                  "🚀 ~ file: authuser.ts ~ line 94 [%s] %s: %s",
-                  err.name,
-                  err.message,
-                  err.errors()[0].description
+                  ),
+                  q.Lambda("X", q.Get(q.Var("X")))
                 )
               )
-            );
+              .then((ret) => 
+                users = ret.data
+              )
+              .catch((err) =>
+                console.error(
+                  console.log(
+                    "🚀 ~ file: authuser.ts ~ line 94 [%s] %s: %s",
+                    err.name,
+                    err.message,
+                    err.errors()[0].description
+                  )
+                )
+              );
 
 
          
 
 
 
-            let Companies = userCompanies.map((company) => {
-              let dataPermissions= userPermissionsRef.filter(
-                (permission) => permission.data.companyRef.id ===company.ref.id );
-               
-              return {
+            let userCompanies = userCompaniesRef.map((company) => {
+              let permissionsMap = userPermissionsRef.filter((permission) =>(permission.data.companyRef.id === company.ref.id)).map((permission) => {
+                if (permission.data.companyRef.id === company.ref.id)
+                  return {
+                    permission: permission.data.permission,
+                    dateCreated: permission.data.dateCreated,
+                    userRef: permission.data.userRef,
+                  };
+              });
+
+              let data = {
+                id:company.ref.id,
                 name: company.data.name,
                 document: company.data.document,
-                email:  company.data.email,
-                dateCreated:  company.data.dateCreated,
-               permissions: dataPermissions.data,
-             
+                email: company.data.email,
+                dateCreated: company.data.dateCreated,
+                users: permissionsMap,
               };
+              return data;
             });
-
-
    
-
+   console.log(userCompanies[0].users)
 
     
 
