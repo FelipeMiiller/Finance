@@ -48,9 +48,10 @@ export const AuthProvider = (props: AuthProviderProps) => {
     if( isAuthorization && !isPermissions ) 
     {
 
-      await api.post('api/authuser')
+      await api.post('api/user/login')
       .then((response) =>{
         let resp = response?.data;
+        console.log(response?.data)
         sessionStorage.setItem("user_bd", JSON.stringify(resp));
         setUser(resp)
       })

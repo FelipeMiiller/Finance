@@ -1,36 +1,37 @@
 
 
 
-export type userFaunaDBType = {
-  ref: { id: string } | Promise;
+export type userFaunaDBType =
+  | {
+      id: string;
+      name: string;
+      email: string;
+      image: string;
+      emailVerified: string;
+      date: Date;
+    }
+  | Object
+  | Promise;
 
-  data: {
-    name: string;
-    email: string;
-    image: string;
-    emailVerified: string;
-    date: Date;
-  };
-} | Object |  Promise;
-
-export type companyFaunaDBType = {
-  ref: { id: string } |  Promise;
-  data: {
-    informations: {
+export type companyFaunaDBType =
+  | {
+      id: string;
+      id: string;
       name: string;
       document: string;
       email: string;
       date: Date;
-    };
-  };
-} | Object |  Promise;
+    }
+  | Object
+  | Promise;
 
-export type permissionFaunaDBType = {
-  ref: { id: string } | undefined;
-  data: {
-    companyRef:string;
-    userRef:string;
-    date: string;
-    permission: "admin" | "read"|"write";
-  };
-} | Object |undefined;
+export type permissionFaunaDBType =
+  | {
+      id: string;
+      companyId: string;
+      userId: string;
+      date: string;
+      permission: "admin" | "read" | "write";
+    }
+  | Object
+  | Promise;

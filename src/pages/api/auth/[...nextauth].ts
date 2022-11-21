@@ -24,11 +24,11 @@ export const authOptions = {
 
       if (isAllowedToSignIn) {
         let status: boolean = true;
-        let userFaunaDB:(userFaunaDBType | object)
+        let userFaunaDB:userFaunaDBType
 
         await fauna
           .query(q.Get(q.Match(q.Index("user_by_email"), user.profile.email)))
-          .then((ret) => userFaunaDB=ret)
+          .then((ret:any) => userFaunaDB={id:ret.ref.id, ...ret.data})
           .catch((err) => {
             console.log("🚀 ~ file: [...nextauth].ts ~ line 33 [%s] %s: %s",
             err.name,
@@ -44,8 +44,9 @@ export const authOptions = {
                 q.Match(q.Index("user_by_email"), q.Casefold(user.profile.email))
               )),
               false,
-              q.Update(q.Ref(q.Collection("users"), userFaunaDB?.ref.id), {
+              q.Update(q.Ref(q.Collection("users"), userFaunaDB.id), {
                 data: {
+                  id:userFaunaDB.id,
                   name: user.profile.name,
                   image: user.profile.picture,
                   emailVerified: user.profile.email_verified,
