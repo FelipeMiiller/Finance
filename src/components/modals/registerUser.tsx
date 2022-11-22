@@ -6,6 +6,7 @@ import { SideBar } from "../SideBar";
 
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { api } from "../../services/api";
 
 export const reporPermissionsCreate = [
   {
@@ -22,9 +23,36 @@ export default function ModalUserRegister({ onClose = () => { }}) {
   const [isIsCnpjVisible, setIsCnpjVisible] = useState(false);
   const {register,reset,handleSubmit,formState: { errors }} = useForm();
 
-  function onSubmit(userData) 
+  async function onSubmit(userData) 
   {
     console.log(userData);
+
+
+
+
+    await api.post('api/user/create', userData)
+    .then((response) =>{
+      let resp = response?.data;
+      console.log(response?.data)
+     
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
   }
   
   const onError = (errors, e) => console.log(errors, e);
@@ -36,24 +64,9 @@ export default function ModalUserRegister({ onClose = () => { }}) {
   
   return (
     <>
-      <div id="parent" className="modalParent" >
+      <div id="parent" className="modalParent">
         <div className="p-4 bg-gray-700 rounded-lg w-60">
           <form onSubmit={handleSubmit(onSubmit, onError)}>
-            <div className="relative w-full mb-3 ">
-              <label
-                className="block mb-2 text-xs font-bold text-white uppercase"
-                htmlFor="grid-password"
-              >
-                Nome
-              </label>
-              <input
-                type="text"
-                className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-blueGray-300 text-slate-900 focus:outline-none focus:ring"
-                placeholder="Nome"
-                {...register("name", { required: true })}
-              />
-            </div>
-
             <div className="relative w-full mb-3">
               <label
                 className="block mb-2 text-xs font-bold text-white uppercase"
@@ -72,21 +85,7 @@ export default function ModalUserRegister({ onClose = () => { }}) {
               />
             </div>
 
-            <div className="relative w-full mb-3">
-              <label
-                className="block mb-2 text-xs font-bold text-white uppercase"
-                htmlFor="grid-password"
-              >
-                Password
-              </label>
-
-              <input
-                type="password"
-                className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-blueGray-300 text-slate-900 focus:outline-none focus:ring"
-                placeholder="Password"
-                {...register("password", { required: true })}
-              />
-            </div>
+            <div className="relative w-full mb-3"></div>
 
             <div className="relative w-full mb-3">
               <label
@@ -100,14 +99,8 @@ export default function ModalUserRegister({ onClose = () => { }}) {
                 className="w-full px-3 py-3 text-sm bg-white border-0 text-slate-900 focus:outline-none "
                 {...register("permission", { required: true })}
               >
-                <option value="...">...</option>
-                {reporPermissionsCreate.map((item) => {
-                  return (
-                    <option key={item.Value} value={item.Value}>
-                      {item.Label}
-                    </option>
-                  );
-                })}
+                <option value="read">{"read"}</option>
+                <option value="write">{"write"}</option>
               </select>
             </div>
 
@@ -136,7 +129,7 @@ export default function ModalUserRegister({ onClose = () => { }}) {
                 <button
                   type="button"
                   className="px-4 py-2 mr-1 text-xs font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none bg-lightBlue-500 active:bg-lightBlue-600 hover:shadow-md focus:outline-none"
-                  onClick={()=>onClose()}
+                  onClick={() => onClose()}
                 >
                   Fechar
                 </button>

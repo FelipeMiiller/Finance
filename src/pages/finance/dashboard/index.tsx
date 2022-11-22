@@ -146,7 +146,7 @@ export default function Dashboard() {
                         {UsersApi.map((user) => {
                           return (
                             <>
-                              <tr className="border-b ">
+                              <tr key={user.id} className="border-b ">
                                 <td className="px-6 py-4 text-sm font-light text-slate-200 whitespace-nowrap">
                                   <input type="checkbox" />
                                 </td>

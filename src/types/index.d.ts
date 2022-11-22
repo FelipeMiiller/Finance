@@ -61,7 +61,7 @@ export type UserType = {
   name: string;
   image: string;
   emailVerified: boolean;
-  permission: permissionId;
+  
 };
 
 export type permissionIdType = {
@@ -70,6 +70,7 @@ export type permissionIdType = {
   permission: string;
   dateCreated: Date;
   userId: string;
+  user: UserType
 };
 
 export type CompanyType = {
@@ -78,7 +79,7 @@ export type CompanyType = {
   document: string;
   email: string;
   dateCreated: Date;
-  users: UserType[];
+  users: permissionIdType[];
 };
 
 export type UserDataFull = {
@@ -88,6 +89,11 @@ export type UserDataFull = {
   name: string;
   image: string;
   emailVerified: boolean;
-  permissions: permissionIdType[];
+  permissions: {
+    id: string;
+    companyId: string;
+    permission: string;
+    dateCreated: Date;
+  };
   companies: CompanyType[];
 };

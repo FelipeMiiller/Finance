@@ -1,89 +1,31 @@
-import { useSession } from 'next-auth/react'
-import Head from 'next/head'
-import { useRouter } from 'next/router'
-import { useState } from 'react'
-import { UserList } from '../../../components/dashboard/UserList'
-import Pagination from '../../../components/Form/pagination'
-import { HeaderDashboard } from '../../../components/Headers/Dashboard'
-import ModalUserRegister from '../../../components/modals/registerUser'
-import { SideBar } from '../../../components/SideBar'
+import { useSession } from "next-auth/react";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { UserList } from "../../../components/dashboard/UserList";
+import Pagination from "../../../components/Form/pagination";
+import { HeaderDashboard } from "../../../components/Headers/Dashboard";
+import ModalUserRegister from "../../../components/modals/registerUser";
+import { SideBar } from "../../../components/SideBar";
+import useAuth, { UseAuthType } from "../../../contexts/AuthContex";
+import { CompanyType, UserType } from "../../../types";
 
-
-const UsersApi = [
-  {
-    id: 1,
-    name: "Felipe Miiller",
-    email: "felipe@gmail.com",
-    acive: true,
-    DataCadastro:"20/02/2022"
-  },
-  {
-    id: 2,
-    name: "Yasmin Miiller",
-    email: "felipe@gmail.com",
-    acive: true,
-    DataCadastro:"20/02/2022"
-  },
-  {
-    id: 3,
-    name: "Felipe Miiller",
-    email: "felipe@gmail.com",
-    acive: true,
-    DataCadastro:"20/02/2022"
-  },
-  {
-    id: 4,
-    name: "Felipe Miiller",
-    email: "felipe@gmail.com",
-    acive: true,
-    DataCadastro:"20/02/2022"
-  },
-  {
-    id: 5,
-    name: "Felipe Miiller",
-    email: "felipe@gmail.com",
-    acive: true,
-    DataCadastro:"20/02/2022"
-  },
-];
-
-
-
-
-Users.auth = true
+Users.auth = true;
 export default function Users() {
-  const router = useRouter()
+  const router = useRouter();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { data: session, status } = useSession();
-  
+  const { status, session, signOut, user, setCompany, company } =
+    useAuth() as UseAuthType;
+  const [companyList, setCompanyList] = useState<CompanyType | undefined>();
 
-
-
-
-
-
-
-
-
-
-
-
+  useEffect(() => {
+    setCompanyList(user.companies.find((item) => item.id === company));
+  }, [company]);
 
   const buttonModalRegister = () => {
     setIsModalVisible(!isModalVisible);
-   
-    
-  }
+  };
 
-
-
-
-
-
-
-
-  
-  
   return (
     <>
       <Head>
@@ -102,7 +44,9 @@ export default function Users() {
 
             <div
               className={
-                " w-auto h-[calc(100vh_-_5rem)] flex  flex-col " + " text-slate-200 " }
+                " w-auto h-[calc(100vh_-_5rem)] flex  flex-col " +
+                " text-slate-200 "
+              }
             >
               <div className="flex flex-col mt-6 ml-40 mr-auto overflow-x-auto bg-gray-800 border-4 border-transparent text-slate-200 rounded-xl">
                 <div className="flex items-center justify-between h-12 mx-2 ">
@@ -117,9 +61,11 @@ export default function Users() {
                   >
                     Cadastrar
                   </button>
-                  {isModalVisible ? <ModalUserRegister  onClose={() => setIsModalVisible(false)} /> : null}
-             
-                  
+                  {isModalVisible ? (
+                    <ModalUserRegister
+                      onClose={() => setIsModalVisible(false)}
+                    />
+                  ) : null}
                 </div>
 
                 <div className="inline-block min-w-full px-2 py-2 ">
@@ -135,10 +81,12 @@ export default function Users() {
                           </th>
                           <th
                             scope="col"
+                            colSpan={"2"}
                             className="px-6 py-4 text-base font-semibold text-left text-slate-200"
                           >
                             Usuario
                           </th>
+
                           <th
                             scope="col"
                             className="px-6 py-4 text-base font-semibold text-left text-slate-200"
@@ -161,24 +109,35 @@ export default function Users() {
                         </tr>
                       </thead>
                       <tbody>
-                        {UsersApi.map((user) => {
+                        {companyList?.users.map((user) => {
+                          console.log(user);
                           return (
                             <>
                               <tr className="border-b ">
                                 <td className="px-6 py-4 text-sm font-light text-slate-200 whitespace-nowrap">
                                   <input type="checkbox" />
                                 </td>
-                                <td className="px-6 py-4 text-sm font-medium text-slate-200 whitespace-nowrap">
-                                  <p>{user.name}</p>
+
+                                <td className="py-4 pl-6 text-sm font-medium text-slate-200 whitespace-nowrap">
+                               
+                                  <img
+                                    className="w-8 h-8 rounded-full"
+                                    src={user.user.image}
+                                    alt="user"
+                                  />
+                                </td>
+
+                                <td className="px-3 py-4 text-sm font-medium text-slate-200 whitespace-nowrap">
+                                  <p>{user.user.name}</p>
                                   <p className="mt-[0.1] text-xs font-light">
-                                    {user.email}
+                                    {user.user.email}
                                   </p>
                                 </td>
                                 <td className="px-6 py-4 text-sm font-light text-slate-200 whitespace-nowrap">
-                                  Mark
+                                  {user.permission}
                                 </td>
                                 <td className="px-6 py-4 text-sm font-light text-slate-200 whitespace-nowrap">
-                                  {user.DataCadastro}
+                                  {String(user.dateCreated)}
                                 </td>
                                 <td className="px-6 py-4 text-sm font-light text-slate-200 whitespace-nowrap">
                                   @mdo
@@ -200,5 +159,4 @@ export default function Users() {
       </div>
     </>
   );
-   
 }

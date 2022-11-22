@@ -21,11 +21,11 @@ export default function Home() {
 
   useEffect(() => {
   
-    if(isAuthorization && user)
+    if(isAuthorization && user?.permissions)
     router.push("/finance/dashboard")
       
     
-  }, [status]);
+  }, [status,user]);
 
   
   

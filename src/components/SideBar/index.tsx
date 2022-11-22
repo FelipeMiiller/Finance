@@ -2,33 +2,34 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useRef } from "react";
 import dashboard from "../../pages/finance/dashboard";
+import { SelectCompany } from "../Form/SelectCompany";
 
 
 
 
 const dashboardLinks = [
   {
-    slug: "/dashboard",
+    slug: "finance/dashboard",
     name: "Dashboard",
     title:"Geral"
   },
   {
-    slug: "relatorio",
+    slug: "finance/relatorio",
     name: "Relatorio",
     title:"Geral"
   },
   {
-    slug: "pagar",
+    slug: "finance/pagar",
     name: "Contas a Pagar",
     title:"Financeiro"
   },
   {
-    slug: "receber",
+    slug: "finance/receber",
     name: "Contas a Receber",
     title:"Financeiro"
   },
   {
-    slug: "users",
+    slug: "finance/users",
     name: "Usuarios",
     title:"Configuações"
   },
@@ -38,7 +39,7 @@ export function SideBar() {
   let {asPath} = useRouter()
  
 
-console.log(asPath)
+
 
   return (
     <aside
@@ -46,8 +47,10 @@ console.log(asPath)
         "h-screen  min-w-[14rem]    my-0  px-0 bg-gray-900 bg-opacity-95 text-slate-200"
       }
     >
-      <div className={"h-20  border-b ro flex pl-2"}>
+      <div className={"h-32  border-b ro flex pl-2 flex-col space-y-2 py-2"}>
         <h1 className={"my-auto text-3xl "}>DashBoard</h1>
+
+        <SelectCompany/>
       </div>
 
     
