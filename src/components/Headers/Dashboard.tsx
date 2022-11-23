@@ -2,7 +2,7 @@
 import { SignInButton } from '../Form/SignInButton';
 
 import {BiSearch} from 'react-icons/bi'
-import { SelectCompany } from '../Form/SelectCompany';
+
 
 
 
@@ -22,7 +22,7 @@ export function HeaderDashboard() {
       <input type="search" className="bg-gray-800 border-0 rounded-full text-slate-200 hover:bg-gray-700 focus:outline-0 "/>
        </div>
        
-         <SelectCompany/>
+        
         <SignInButton/>
       </div>
     </header>

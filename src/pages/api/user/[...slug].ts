@@ -103,7 +103,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
       );
 
 
-console.log(message);
+
        
   
      response.status(200).json(message);
@@ -112,5 +112,124 @@ console.log(message);
       response.setHeader("Allow", "POST");
       response.status(405).end("Method not allowed");
     }
-  };
+
+
+    if (request.method === "POST" &&  validated  && request.query.slug=="edit" ) {
+      
+        let message:any;
+ 
+        await fauna
+        .query(
+          q.If(
+              q.Exists(
+                q.Match(
+                  q.Index("permission_by_companyId_and_userId"),[requestSubscribe.company,requestSubscribe.id]
+                )
+              )
+            ,
+            q.Update(q.Ref(q.Collection("permissions"), requestSubscribe.permissionId),{
+              data: {
+                permission: requestSubscribe.permission,
+              },
+            }),
+            false
+          )
+        )
+        .then((ret: any) => {
+          if (ret != false) {
+            message = {
+              success: true,
+              message: "User update successfully",
+            };
+          } else if (ret === false) {
+            message = {
+              success: false,
+              message: "User existed ",
+            };
+          }
+        })
+        .catch((err) =>
+          console.error(
+            "Error: [%s] %s: %s",
+            err.name,
+            err.message,
+            err.errors()[0].description
+          )
+        );
   
+  
+  
+         
+    
+       response.status(200).json(message);
+      
+      } else {
+        response.setHeader("Allow", "POST");
+        response.status(405).end("Method not allowed");
+      }
+
+
+
+
+
+
+
+
+
+  if (request.method === "POST" &&  validated  && request.query.slug=="delete" ) {
+      
+    let message:any;
+
+    await fauna
+    .query(
+      q.If(
+          q.Exists(
+            q.Match(
+              q.Index("permission_by_companyId_and_userId"),[requestSubscribe.company,requestSubscribe.id]
+            )
+          )
+        ,
+        q.Update(q.Ref(q.Collection("permissions"), requestSubscribe.permissionId),{
+          data: {
+            permission: requestSubscribe.permission,
+          },
+        }),
+        false
+      )
+    )
+    .then((ret: any) => {
+      if (ret != false) {
+        message = {
+          success: true,
+          message: "User update successfully",
+        };
+      } else if (ret === false) {
+        message = {
+          success: false,
+          message: "User existed ",
+        };
+      }
+    })
+    .catch((err) =>
+      console.error(
+        "Error: [%s] %s: %s",
+        err.name,
+        err.message,
+        err.errors()[0].description
+      )
+    );
+
+
+
+     
+
+   response.status(200).json(message);
+  
+  } else {
+    response.setHeader("Allow", "POST");
+    response.status(405).end("Method not allowed");
+  }
+
+
+
+};

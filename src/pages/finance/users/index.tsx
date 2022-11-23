@@ -1,5 +1,6 @@
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { UserList } from "../../../components/dashboard/UserList";
@@ -80,7 +81,7 @@ export default function Users() {
                           </th>
                           <th
                             scope="col"
-                            colSpan={"2"}
+                            colSpan={2}
                             className="px-6 py-4 text-base font-semibold text-left text-slate-200"
                           >
                             Usuario
@@ -109,21 +110,26 @@ export default function Users() {
                       </thead>
                       <tbody>
                         {companyList?.users.map((user) => {
-                          console.log(user);
+                         
                           return (
                             <>
-                              <tr className="border-b ">
+                              <tr key={user.id} className="border-b ">
                                 <td className="px-6 py-4 text-sm font-light text-slate-200 whitespace-nowrap">
                                   <input type="checkbox" />
                                 </td>
 
                                 <td className="py-4 pl-6 text-sm font-medium text-slate-200 whitespace-nowrap">
-                               
-                                  <img
-                                    className="w-8 h-8 rounded-full"
-                                    src={user.user.image}
-                                    alt="user"
-                                  />
+                                  {!user.user.image ? (
+                                    <p></p>
+                                  ) : (
+                                    <img
+                                      className="rounded-full "
+                                      width={32}
+                                      height={32}
+                                      src={user.user.image}
+                                      alt="User Image"
+                                    />
+                                  )}
                                 </td>
 
                                 <td className="px-3 py-4 text-sm font-medium text-slate-200 whitespace-nowrap">
