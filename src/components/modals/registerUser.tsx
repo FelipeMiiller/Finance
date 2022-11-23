@@ -7,6 +7,7 @@ import { SideBar } from "../SideBar";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { api } from "../../services/api";
+import useAuth, { UseAuthType } from "../../contexts/AuthContex";
 
 export const reporPermissionsCreate = [
   {
@@ -22,15 +23,18 @@ export const reporPermissionsCreate = [
 export default function ModalUserRegister({ onClose = () => { }}) {
   const [isIsCnpjVisible, setIsCnpjVisible] = useState(false);
   const {register,reset,handleSubmit,formState: { errors }} = useForm();
-
+  const { company } =useAuth() as UseAuthType;
+  let dateCreated =new Date();
+  
+  
+  
+  
+  
+  
   async function onSubmit(userData) 
   {
-    console.log(userData);
-
-
-
-
-    await api.post('api/user/create', userData)
+    
+    await api.post('api/user/create', {company, dateCreated,...userData})
     .then((response) =>{
       let resp = response?.data;
       console.log(response?.data)

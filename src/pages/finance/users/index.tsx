@@ -14,8 +14,7 @@ Users.auth = true;
 export default function Users() {
   const router = useRouter();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { status, session, signOut, user, setCompany, company } =
-    useAuth() as UseAuthType;
+  const { status, session, signOut, user, setCompany, company } =useAuth() as UseAuthType;
   const [companyList, setCompanyList] = useState<CompanyType | undefined>();
 
   useEffect(() => {

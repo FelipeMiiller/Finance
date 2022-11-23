@@ -62,7 +62,7 @@ export type UserType = {
   image: string;
   emailVerified: boolean;
   
-};
+}| promisse;
 
 export type permissionIdType = {
   id: string;
